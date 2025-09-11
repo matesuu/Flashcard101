@@ -74,7 +74,7 @@ public class FlashcardSet
         }
     }
 
-    public String displayTerm(int index)
+    public String getTerm(int index)
     {
         if(index < 0 || index >= size)
         {
@@ -83,20 +83,24 @@ public class FlashcardSet
 
         else
         {
-            System.out.println(terms.get(index));
             return terms.get(index);
         }
     }
 
-    public void displayInfo(String term)
+    public String getInfo(String term)
     {
         if(cards.containsKey(term))
         {
-            System.out.println(cards.get(term));
+            return cards.get(term);
+        }
+
+        else
+        {
+            return null;
         }
     }
 
-    public void randomize()
+    public void shuffle()
     {
         // implement later
     }

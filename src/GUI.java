@@ -46,6 +46,23 @@ public class GUI
         createButton.setPreferredSize(new Dimension(600, 700));
         createPanel.add(createButton, BorderLayout.CENTER);
 
+        
+        reviewButton.addActionListener(e -> {
+            
+            set = new FlashcardSet("Cards/cards.csv"); // test
+            frame.dispose();
+            review();
+
+        });
+
+        createButton.addActionListener(e -> {
+            
+            frame.dispose();
+            createModify();
+        });
+
+
+
         /*JPanel textBoxPanel = new JPanel();
         frame.add(textBoxPanel, BorderLayout. CENTER);
 
@@ -65,6 +82,83 @@ public class GUI
         set = new FlashcardSet(dir + filename + ".csv");
 
         */
+
+       
+    }
+
+    public void review(FlashcardSet set)
+    {
+        JFrame reviewFrame = new JFrame("Review Flashcards");
+        reviewFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        reviewFrame.setLayout(new BorderLayout());
+        reviewFrame.setSize(1200, 1200);
+        reviewFrame.setResizable(true);
+        reviewFrame.setVisible(true);
+
+        boolean CLICK_FLAG = false;
+        boolean NEXT_FLAG = false;
+        int index = 0;
+
+        JPanel cardPanel = new JPanel();
+        cardPanel.setLayout(new BorderLayout());
+        reviewFrame.add(cardPanel, BorderLayout.CENTER);
+
+        JButton nextButton = new JButton("Next");
+        nextButton.setFont(new Font("Georgia", Font.PLAIN, 24));
+        cardPanel.add(nextButton, BorderLayout.SOUTH);
+
+        nextButton.addActionListener(e -> {
+            
+            
+
+        });
+
+        while(index < set.size());
+        {
+            FLIP_FLAG = false;
+            NEXT_FLAG = false;
+            String term = set.getTerm(index);
+            String info = set.getInfo(term);
+
+            if(term == null)
+            {
+                throw new IllegalArgumentException("term does not exist");
+            }
+
+            if(info == null)
+            {
+                throw new IllegalArgumentException("info does not exist");
+            }
+            
+            JButton termButton = new JButton(term);
+            termButton.setFont(new Font("Georgia", Font.PLAIN, 36));
+            reviewFrame.add(termButton, BorderLayout.CENTER);
+
+            nextButton.addActionListener(e -> {
+            
+                FLIP_FLAG = true;
+
+            });
+
+            while(!FLIP_FLAG)
+            {
+                termButton.addActionListener(e-> {
+                    
+                    
+
+                })
+            }
+            
+            index++;
+        }
+
+        JButton termButton = new JButton()
+        
+    }
+
+    public void createModify()
+    {
+        
     }
 
     public static void main(String[] args)
