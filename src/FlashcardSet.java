@@ -10,12 +10,18 @@ public class FlashcardSet
 {
     private HashMap<String, String> cards = new HashMap<>();
     private ArrayList<String> terms = new ArrayList<>();
+    private int size = 0;
 
     public FlashcardSet(String filename)
     {
         loadData(filename);
     }
 
+    public int getSize()
+    {
+        return size;
+    }
+    
     public void loadData(String filename)
     {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename)))
@@ -26,11 +32,8 @@ public class FlashcardSet
             {
                 String[] parts = line.split(",");
                 
-                if(!cards.containsKey(parts[0].trim()))
-                {
-                    cards.put(parts[0].trim(), parts[1].trim());
-                    terms.add(parts[0].trim());
-                }
+                add(parts[0].trim(), parts[1].trim());
+                size++;
             }
         }
 
@@ -48,6 +51,8 @@ public class FlashcardSet
             cards.put(term, info);
             terms.add(term);
         }
+
+        size++;
     }
 
     public void remove(String term)
@@ -57,6 +62,8 @@ public class FlashcardSet
             cards.remove(term);
             terms.remove(term);
         }
+
+        size--;
     }
 
     public void edit(String term, String newInfo)
@@ -67,14 +74,36 @@ public class FlashcardSet
         }
     }
 
-    public void display()
+    public String displayTerm(int index)
     {
-        for(int i = 0; i < terms.size(); i++)
+        if(index < 0 || index >= size)
         {
-            System.out.println(terms.get(i) + ": " + cards.get(terms.get(i)));
+            return null;
         }
 
-        System.out.print("\n");
+        else
+        {
+            System.out.println(terms.get(index));
+            return terms.get(index);
+        }
+    }
+
+    public void displayInfo(String term)
+    {
+        if(cards.containsKey(term))
+        {
+            System.out.println(cards.get(term));
+        }
+    }
+
+    public void randomize()
+    {
+        // implement later
+    }
+
+    public void search(String term)
+    {
+        // implement later
     }
 
     public void saveData(String filename)
@@ -83,8 +112,17 @@ public class FlashcardSet
         {
             for(int i = 0; i < terms.size(); i++)
             {
-                String line = terms.get(i) + "," + cards.get(terms.get(i)) + "\n";
-                writer.write(line);
+                if(i < terms.size() - 1)
+                {
+                    String line = terms.get(i) + "," + cards.get(terms.get(i)) + "\n";
+                    writer.write(line);
+                }
+
+                else
+                {
+                    String line = terms.get(i) + "," + cards.get(terms.get(i));
+                    writer.write(line);
+                }
             }
         }
 

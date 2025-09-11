@@ -6,7 +6,8 @@ import java.util.HashMap;
 
 public class GUI
 {
-    private String filepath = "Cards/cards.txt";
+    private final String dir = "Cards/";
+    private String filename = "";
     private FlashcardSet set;
 
     public GUI()
@@ -15,12 +16,29 @@ public class GUI
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setSize(1200, 700);
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.setVisible(true);
 
-        set = new FlashcardSet(filepath);
+        JLabel title = new JLabel("Flashcard101", SwingConstants.CENTER);
+        frame.add(title, BorderLayout.NORTH);
 
-        
+        JPanel textBoxPanel = new JPanel();
+        frame.add(textBoxPanel, BorderLayout. CENTER);
+
+        JLabel textBoxLabel = new JLabel("Enter a Flashcard Set: " );
+        JTextField inputField = new JTextField(20);
+        JButton submitButton = new JButton("Select");
+
+        submitButton.addActionListener(e -> {
+
+            String filename = inputField.getText().trim();
+        });
+
+        textBoxPanel.add(textBoxLabel);
+        textBoxPanel.add(inputField);
+        textBoxPanel.add(submitButton);
+
+        set = new FlashcardSet(dir + filename);
     }
 
     public static void main(String[] args)

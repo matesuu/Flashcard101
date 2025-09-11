@@ -11,7 +11,27 @@ public class Flashcard
 
     public Flashcard(String t, String i)
     {
+        setTerm(t);
+        setInfo(i);
+    }
+
+    public void setTerm(String t)
+    {
         this.term = t;
+    }
+
+    public void setInfo(String i)
+    {
         this.info = i;
+    }
+
+    public String getTerm()
+    {
+        return this.term;
+    }
+
+    public String getInfo()
+    {
+        return this.info;
     }
 }
