@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.io.File;
 
 public class GUI
 {
@@ -25,13 +26,13 @@ public class GUI
         JPanel textBoxPanel = new JPanel();
         frame.add(textBoxPanel, BorderLayout. CENTER);
 
-        JLabel textBoxLabel = new JLabel("Enter a Flashcard Set: " );
-        JTextField inputField = new JTextField(20);
+        JLabel textBoxLabel = new JLabel("Enter a Flashcard Set: ");
+        JComboBox<String> inputField = new JComboBox<>();
         JButton submitButton = new JButton("Select");
 
         submitButton.addActionListener(e -> {
 
-            String filename = inputField.getText().trim();
+            
         });
 
         textBoxPanel.add(textBoxLabel);
