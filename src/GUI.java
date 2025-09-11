@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.io.File;
 
@@ -51,7 +53,7 @@ public class GUI
             
             set = new FlashcardSet("Cards/cards.csv"); // test
             frame.dispose();
-            review();
+            review(set);
 
         });
 
@@ -88,6 +90,7 @@ public class GUI
 
     public void review(FlashcardSet set)
     {
+        int counter = 1;
         JFrame reviewFrame = new JFrame("Review Flashcards");
         reviewFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         reviewFrame.setLayout(new BorderLayout());
@@ -95,65 +98,51 @@ public class GUI
         reviewFrame.setResizable(true);
         reviewFrame.setVisible(true);
 
-        boolean CLICK_FLAG = false;
-        boolean NEXT_FLAG = false;
-        int index = 0;
-
         JPanel cardPanel = new JPanel();
         cardPanel.setLayout(new BorderLayout());
         reviewFrame.add(cardPanel, BorderLayout.CENTER);
 
         JButton nextButton = new JButton("Next");
         nextButton.setFont(new Font("Georgia", Font.PLAIN, 24));
-        cardPanel.add(nextButton, BorderLayout.SOUTH);
+        reviewFrame.add(nextButton, BorderLayout.SOUTH);
 
-        nextButton.addActionListener(e -> {
-            
-            
+        JButton counterButton = new JButton("Card " + counter + " of " + set.getSize());
+        counterButton.setFont(new Font("Georgia", Font.PLAIN, 24));
+        reviewFrame.add(counterButton, BorderLayout.NORTH);
 
-        });
+        JButton cardButton = new JButton("");
+        cardButton.setFont(new Font("Georgia", Font.PLAIN, 24));
+        cardPanel.add(cardButton, BorderLayout.CENTER);
 
-        while(index < set.size());
+        
+        if(set.getSize() <= 0)
         {
-            FLIP_FLAG = false;
-            NEXT_FLAG = false;
-            String term = set.getTerm(index);
-            String info = set.getInfo(term);
-
-            if(term == null)
-            {
-                throw new IllegalArgumentException("term does not exist");
-            }
-
-            if(info == null)
-            {
-                throw new IllegalArgumentException("info does not exist");
-            }
-            
-            JButton termButton = new JButton(term);
-            termButton.setFont(new Font("Georgia", Font.PLAIN, 36));
-            reviewFrame.add(termButton, BorderLayout.CENTER);
-
-            nextButton.addActionListener(e -> {
-            
-                FLIP_FLAG = true;
-
-            });
-
-            while(!FLIP_FLAG)
-            {
-                termButton.addActionListener(e-> {
-                    
-                    
-
-                })
-            }
-            
-            index++;
+            throw new IllegalArgumentException("There are no terms in this set");
         }
 
-        JButton termButton = new JButton()
-        
+        String term = set.getTerm(0);
+        cardButton.setText(term);
+
+
+        for(int i = 0; i < set.getSize(); i++)
+        {
+
+            cardButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) 
+                {
+                    cardButton.setText(set.getInfo(term));
+                }
+            });
+
+            cardButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) 
+                {
+                    cardButton.setText(set.getInfo(term));
+                }
+            });
+        }
     }
 
     public void createModify()

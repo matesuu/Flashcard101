@@ -8,36 +8,36 @@ import java.util.ArrayList;
 
 public class FlashcardSet
 {
-    private HashMap<String, String> cards = new HashMap<>();
-    private ArrayList<String> terms = new ArrayList<>();
-    private int size = 0;
+    private HashMap<String, String> cards = new HashMap<>(); // hashmap to store each term with its associated info
+    private ArrayList<String> terms = new ArrayList<>(); // arraylist for storing names of terms as strings for convinience
+    private int size = 0; // size of set
 
-    public FlashcardSet(String filename)
+    public FlashcardSet(String filename) // constructor that reads data from a file
     {
         loadData(filename);
     }
 
-    public int getSize()
+    public int getSize() // returns size
     {
         return size;
     }
     
-    public void loadData(String filename)
+    public void loadData(String filename) // uses a filereader to read data
     {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename)))
         {
-            String line = "";
+            String line = ""; // string to store current line in file
 
-            while((line = reader.readLine()) != null)
+            while((line = reader.readLine()) != null) // if line is not "", then continue loop
             {
-                String[] parts = line.split(",");
+                String[] parts = line.split(","); // split the string into term and info (comma acts a delimiter)
                 
-                add(parts[0].trim(), parts[1].trim());
-                size++;
+                add(parts[0].trim(), parts[1].trim()); // NOTE!!!: add(parts[0].trim(), parts[1].trim()) also worked
+                size++; // increment size
             }
         }
 
-        catch (IOException e)
+        catch (IOException e) // if it fails
         {
             e.printStackTrace();
             return ;
