@@ -6,7 +6,9 @@ To run our project from the Command Line:
 
 1. Download and Install the latest version of Java from the Oracle website
 
-2. use git clone to clone our project repo into a desired folder (git clone <https://github.com/matesuu/Flashcard101.git>)
+2. use git clone to clone our project repo into a desired folder:
+
+    git clone https://github.com/matesuu/Flashcard101.git
 
 3. Type the following into the Command Line while in the /src folder:
 
