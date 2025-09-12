@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class GUI
 {
@@ -51,46 +54,22 @@ public class GUI
         
         reviewButton.addActionListener(e -> {
             
-            set = new FlashcardSet("Cards/cards.csv"); // test
+             // test
             frame.dispose();
-            review(set);
+            reviewGUI();
 
         });
 
         createButton.addActionListener(e -> {
             
             frame.dispose();
-            createModify();
+            createModifyGUI();
         });
 
-
-
-        /*JPanel textBoxPanel = new JPanel();
-        frame.add(textBoxPanel, BorderLayout. CENTER);
-
-        JLabel textBoxLabel = new JLabel("Enter a Flashcard Set: ");
-        JComboBox<String> inputField = new JComboBox<>();
-        JButton submitButton = new JButton("Select");
-
-        submitButton.addActionListener(e -> {
-
-            
-        });
-
-        textBoxPanel.add(textBoxLabel);
-        textBoxPanel.add(inputField);
-        textBoxPanel.add(submitButton);
-
-        set = new FlashcardSet(dir + filename + ".csv");
-
-        */
-
-       
     }
 
-    public void review(FlashcardSet set)
+    public void reviewGUI()
     {
-        int counter = 1;
         JFrame reviewFrame = new JFrame("Review Flashcards");
         reviewFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         reviewFrame.setLayout(new BorderLayout());
@@ -98,56 +77,112 @@ public class GUI
         reviewFrame.setResizable(true);
         reviewFrame.setVisible(true);
 
-        JPanel cardPanel = new JPanel();
-        cardPanel.setLayout(new BorderLayout());
-        reviewFrame.add(cardPanel, BorderLayout.CENTER);
+        JPanel textBoxPanel = new JPanel();
+        reviewFrame.add(textBoxPanel, BorderLayout.CENTER);
 
-        JButton nextButton = new JButton("Next");
-        nextButton.setFont(new Font("Georgia", Font.PLAIN, 24));
-        reviewFrame.add(nextButton, BorderLayout.SOUTH);
+        JLabel textBoxLabel = new JLabel("Enter a Flashcard Set: ");
+        JTextField textField = new JTextField(20);
+        JButton submitButton = new JButton("Select");
 
-        JButton counterButton = new JButton("Card " + counter + " of " + set.getSize());
-        counterButton.setFont(new Font("Georgia", Font.PLAIN, 24));
-        reviewFrame.add(counterButton, BorderLayout.NORTH);
+        textBoxPanel.add(textBoxLabel);
+        textBoxPanel.add(textField);
+        textBoxPanel.add(submitButton);
 
-        JButton cardButton = new JButton("");
-        cardButton.setFont(new Font("Georgia", Font.PLAIN, 24));
-        cardPanel.add(cardButton, BorderLayout.CENTER);
+        submitButton.addActionListener(new ActionListener(){
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            filename = textField.getText().trim();
+        
+            if(!filename.isEmpty()) 
+            {
+                set = new FlashcardSet(dir + filename + ".csv");
+                System.out.println("loaded flashcard set: " + filename);
+
+                textBoxPanel.remove(textBoxLabel);
+                textBoxPanel.remove(textField);
+                textBoxPanel.remove(submitButton);
+                reviewFrame.revalidate();
+
+                return ;
+            } 
+
+            else 
+            {
+                JOptionPane.showMessageDialog(null, "Please enter a filename: ");
+            }
+        }
+            
+        });
+        
+        
+         JPanel reviewPanel = new JPanel(); 
+         reviewFrame.add(reviewPanel, BorderLayout.CENTER);
+
+         JButton cardButton = new JButton("Start");
+         cardButton.setFont(setFont(new Font("Georgia", Font.PLAIN, 24)));
+         reviewPanel.add(cardButton);
 
         
-        if(set.getSize() <= 0)
+        cardButton.addActionListener(new ActionListener(){
+
+        @Override
+        public void actionPerformed(ActionEvent e)
         {
-            throw new IllegalArgumentException("There are no terms in this set");
+            for(int i = 0; i < )
         }
-
-        String term = set.getTerm(0);
-        cardButton.setText(term);
-
-
-        for(int i = 0; i < set.getSize(); i++)
-        {
-
-            cardButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) 
-                {
-                    cardButton.setText(set.getInfo(term));
-                }
-            });
-
-            cardButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) 
-                {
-                    cardButton.setText(set.getInfo(term));
-                }
-            });
-        }
+       
     }
 
-    public void createModify()
+    public void createModifyGUI()
     {
+        JFrame createFrame = new JFrame("Create and Modify");
+        createFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        createFrame.setLayout(new BorderLayout());
+        createFrame.setSize(1200, 1200);
+        createFrame.setResizable(true);
+        createFrame.setVisible(true);
+
+        JPanel textBoxPanel = new JPanel();
+        createFrame.add(textBoxPanel, BorderLayout.CENTER);
+
+        JLabel textBoxLabel = new JLabel("Enter a Flashcard Set: ");
+        JTextField textField = new JTextField(20);
+        JButton submitButton = new JButton("Select");
+
+        textBoxPanel.add(textBoxLabel);
+        textBoxPanel.add(textField);
+        textBoxPanel.add(submitButton);
+
+        submitButton.addActionListener(new ActionListener(){
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            filename = textField.getText().trim();
         
+            if(!filename.isEmpty()) 
+            {
+                set = new FlashcardSet(dir + filename + ".csv");
+                System.out.println("loaded flashcard set: " + filename);
+
+                textBoxPanel.remove(textBoxLabel);
+                textBoxPanel.remove(textField);
+                textBoxPanel.remove(submitButton);
+                createFrame.revalidate();
+
+                return ;
+            } 
+
+            else 
+            {
+                JOptionPane.showMessageDialog(null, "Please enter a filename: ");
+            }
+        }
+            
+            });
+
     }
 
     public static void main(String[] args)

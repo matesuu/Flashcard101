@@ -19,7 +19,23 @@ public class FlashcardSet
 
     public int getSize() // returns size
     {
-        return size;
+        return terms.size();
+    }
+
+    public void display()
+    {
+        if(size == 0)
+        {
+            return ;
+        }
+
+        else
+        {
+            for(int i = 0; i < terms.size(); i++)
+            {
+                System.out.println(terms.get(i));
+            }
+        }
     }
     
     public void loadData(String filename) // uses a filereader to read data
