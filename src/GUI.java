@@ -121,7 +121,7 @@ public class GUI
          reviewFrame.add(reviewPanel, BorderLayout.CENTER);
 
          JButton cardButton = new JButton("Start");
-         cardButton.setFont(setFont(new Font("Georgia", Font.PLAIN, 24)));
+         cardButton.setFont(new Font("Georgia", Font.PLAIN, 24));
          reviewPanel.add(cardButton);
 
         
@@ -130,9 +130,10 @@ public class GUI
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            for(int i = 0; i < )
+          //  for(int i = 0; i < )
         }
-       
+         
+    });
     }
 
     public void createModifyGUI()
