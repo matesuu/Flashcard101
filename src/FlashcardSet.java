@@ -1,16 +1,17 @@
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FlashcardSet
 {
     private HashMap<String, String> cards = new HashMap<>(); // hashmap to store each term with its associated info
     private ArrayList<String> terms = new ArrayList<>(); // arraylist for storing names of terms as strings for convinience
     private int size = 0; // size of set
+    ArrayList<QA> questions = new ArrayList<>(); // Stores only terms (questions)
 
     public FlashcardSet(String filename) // constructor that reads data from a file
     {
@@ -66,6 +67,7 @@ public class FlashcardSet
         {
             cards.put(term, info);
             terms.add(term);
+            questions.add(new QA(term, info));
         }
 
         size++;

@@ -135,56 +135,113 @@ public class GUI
          
     });
     }
-
-    public void createModifyGUI()
-    {
+    
+    public void createModifyGUI() {
         JFrame createFrame = new JFrame("Create and Modify");
         createFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        createFrame.setLayout(new BorderLayout());
-        createFrame.setSize(1200, 1200);
+        createFrame.setSize(800, 600);
         createFrame.setResizable(true);
-        createFrame.setVisible(true);
-
-        JPanel textBoxPanel = new JPanel();
-        createFrame.add(textBoxPanel, BorderLayout.CENTER);
-
+    
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        createFrame.add(mainPanel);
+    
+        JPanel textBoxPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel textBoxLabel = new JLabel("Enter a Flashcard Set: ");
         JTextField textField = new JTextField(20);
         JButton submitButton = new JButton("Select");
-
+    
         textBoxPanel.add(textBoxLabel);
         textBoxPanel.add(textField);
         textBoxPanel.add(submitButton);
+    
+        JPanel flashcardPanel = reviewFlashcardUI();
+    
+        mainPanel.add(textBoxPanel);
+        mainPanel.add(Box.createVerticalStrut(10)); // spacing
+        flashcardPanel.setVisible(false);
+        mainPanel.add(flashcardPanel);
 
-        submitButton.addActionListener(new ActionListener(){
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            filename = textField.getText().trim();
-        
-            if(!filename.isEmpty()) 
-            {
+        submitButton.addActionListener(e -> {
+            String filename = textField.getText().trim();
+            if (!filename.isEmpty()) {
                 set = new FlashcardSet(dir + filename + ".csv");
-                System.out.println("loaded flashcard set: " + filename);
-
-                textBoxPanel.remove(textBoxLabel);
-                textBoxPanel.remove(textField);
-                textBoxPanel.remove(submitButton);
+                System.out.println("Loaded flashcard set: " + filename);
                 createFrame.revalidate();
-
-                return ;
-            } 
-
-            else 
-            {
+                flashcardPanel.setVisible(true);
+            } else {
                 JOptionPane.showMessageDialog(null, "Please enter a filename: ");
             }
-        }
-            
-            });
-
+        });
+    
+        createFrame.setVisible(true);
     }
+    
+    public JPanel reviewFlashcardUI() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setPreferredSize(new Dimension(400, 180));
+    
+        JLabel cardLabel = new JLabel("Your Card Appears Here", SwingConstants.CENTER);
+        cardLabel.setFont(new Font("Georgia", Font.BOLD, 20));
+        mainPanel.add(cardLabel, BorderLayout.CENTER);
+    
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        Dimension buttonSize = new Dimension(120, 50);
+    
+        JButton prevButton = new JButton("Previous");
+        prevButton.setPreferredSize(buttonSize);
+    
+        JButton flipButton = new JButton("Flip");
+        flipButton.setPreferredSize(buttonSize);
+    
+        JButton nextButton = new JButton("Next");
+        nextButton.setPreferredSize(buttonSize);
+    
+        buttonPanel.add(prevButton);
+        buttonPanel.add(flipButton);
+        buttonPanel.add(nextButton);
+    
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+     
+        final int[] currentIndex = {0};
+        final boolean[] showQuestion = {true};
+    
+        Runnable updateCard = () -> {
+            if (set != null && !set.questions.isEmpty()) {
+                QA current = set.questions.get(currentIndex[0]);
+                cardLabel.setText(showQuestion[0] ? current.getQuestion() : current.getAnswer());
+            } else {
+             //   cardLabel.setText("No cards available");
+            }
+        };
+    
+        updateCard.run();
+    
+        prevButton.addActionListener(e -> {
+            if (set != null && !set.questions.isEmpty()) {
+                currentIndex[0] = (currentIndex[0] - 1 + set.questions.size()) % set.questions.size();
+                showQuestion[0] = true; // show question when moving
+                updateCard.run();
+            }
+        });
+    
+        nextButton.addActionListener(e -> {
+            if (set != null && !set.questions.isEmpty()) {
+                currentIndex[0] = (currentIndex[0] + 1) % set.questions.size();
+                showQuestion[0] = true;
+                updateCard.run();
+            }
+        });
+    
+        flipButton.addActionListener(e -> {
+            if (set != null && !set.questions.isEmpty()) {
+                showQuestion[0] = !showQuestion[0];
+                updateCard.run();
+            }
+        });
+    
+        return mainPanel;
+    } 
 
     public static void main(String[] args)
     {
