@@ -155,29 +155,10 @@ public class GUI
         textBoxPanel.add(textField);
         textBoxPanel.add(submitButton);
     
-        JPanel flashcardPanel = reviewFlashcardUI();
-    
-        mainPanel.add(textBoxPanel);
-        mainPanel.add(Box.createVerticalStrut(10)); // spacing
-        flashcardPanel.setVisible(false);
-        mainPanel.add(flashcardPanel);
-
-        submitButton.addActionListener(e -> {
-            String filename = textField.getText().trim();
-            if (!filename.isEmpty()) {
-                set = new FlashcardSet(dir + filename + ".csv");
-                System.out.println("Loaded flashcard set: " + filename);
-                createFrame.revalidate();
-                flashcardPanel.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "Please enter a filename: ");
-            }
-        });
-    
-        createFrame.setVisible(true);
+        
     }
     
-    public JPanel reviewFlashcardUI() {
+    public void reviewFlashcardUI() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setPreferredSize(new Dimension(400, 180));
     
@@ -203,45 +184,9 @@ public class GUI
     
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
      
-        final int[] currentIndex = {0};
-        final boolean[] showQuestion = {true};
-    
-        Runnable updateCard = () -> {
-            if (set != null && !set.questions.isEmpty()) {
-                QA current = set.questions.get(currentIndex[0]);
-                cardLabel.setText(showQuestion[0] ? current.getQuestion() : current.getAnswer());
-            } else {
-             //   cardLabel.setText("No cards available");
-            }
-        };
-    
-        updateCard.run();
-    
-        prevButton.addActionListener(e -> {
-            if (set != null && !set.questions.isEmpty()) {
-                currentIndex[0] = (currentIndex[0] - 1 + set.questions.size()) % set.questions.size();
-                showQuestion[0] = true; // show question when moving
-                updateCard.run();
-            }
-        });
-    
-        nextButton.addActionListener(e -> {
-            if (set != null && !set.questions.isEmpty()) {
-                currentIndex[0] = (currentIndex[0] + 1) % set.questions.size();
-                showQuestion[0] = true;
-                updateCard.run();
-            }
-        });
-    
-        flipButton.addActionListener(e -> {
-            if (set != null && !set.questions.isEmpty()) {
-                showQuestion[0] = !showQuestion[0];
-                updateCard.run();
-            }
-        });
-    
-        return mainPanel;
-    } 
+
+    }
+        
 
     public static void main(String[] args)
     {
