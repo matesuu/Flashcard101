@@ -118,16 +118,45 @@ public class FlashcardSet
         }
     }
 
-    public void shuffle()
+    public void shuffle() 
     {
-        // implement later
+        // Shuffle the order of terms
+        Collections.shuffle(terms);
+        // Rebuild questions list in the same order
+        questions.clear();
+        for (String t : terms) 
+        {
+            String info = cards.get(t);
+            questions.add(new QA(t, info));
+        }
     }
 
-    public void search(String term)
+    public String search(String term) 
     {
-        // implement later
+        // Simple exact match
+        if (cards.containsKey(term)) 
+        {
+            return cards.get(term);
+        }
+        // Or partial match: find any terms that contain the query
+        StringBuilder results = new StringBuilder();
+        for (String t : terms) 
+        {
+            if (t.toLowerCase().contains(term.toLowerCase())) 
+            {
+                results.append(t)
+                       .append(": ")
+                       .append(cards.get(t))
+                       .append("\n");
+            }
+        }
+        if (results.length() > 0) 
+        {
+            return results.toString();
+        }
+        return null;
     }
-
+    
     public void saveData(String filename)
     {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename)))
