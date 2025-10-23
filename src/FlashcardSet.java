@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Collections;
 
 public class FlashcardSet
 {
@@ -86,7 +87,7 @@ public class FlashcardSet
 
     public void edit(String term, String newInfo)
     {
-        if(cards.containsKey(terms))
+        if(cards.containsKey(term))
         {
             cards.put(term, newInfo);
         }
