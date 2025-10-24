@@ -71,75 +71,100 @@ public class GUI
         });
         frame.pack(); // size window based on its contents
         frame.setLocationRelativeTo(null); // center the window
-        frame.setVisible(true);
-
+        frame.setVisible(true);  
     }
+    private java.io.File resolveSetFile(String baseName) {
+    java.io.File f1 = new java.io.File("Cards/" + baseName + ".csv");   // run from project root
+    if (f1.exists()) return f1;
+    java.io.File f2 = new java.io.File("../Cards/" + baseName + ".csv"); // run from src/
+    if (f2.exists()) return f2;
+    return null;
+    }   
+    public void reviewGUI() {
+    JFrame reviewFrame = new JFrame("Review Flashcards");
+    reviewFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    reviewFrame.setLayout(new BorderLayout());
+    reviewFrame.setResizable(true);
 
-    public void reviewGUI()
-    {
-        JFrame reviewFrame = new JFrame("Review Flashcards");
-        reviewFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        reviewFrame.setLayout(new BorderLayout());
-        reviewFrame.setResizable(true);
+    // --- top: load a set ---
+    JPanel textBoxPanel = new JPanel();
+    JLabel textBoxLabel = new JLabel("Enter a Flashcard Set: ");
+    JTextField textField = new JTextField(20);
+    JButton submitButton = new JButton("Select");
+    textBoxPanel.add(textBoxLabel);
+    textBoxPanel.add(textField);
+    textBoxPanel.add(submitButton);
+    reviewFrame.add(textBoxPanel, BorderLayout.NORTH);
 
-        JPanel textBoxPanel = new JPanel();
-        JLabel textBoxLabel = new JLabel("Enter a Flashcard Set: ");
-        JTextField textField = new JTextField(20);
-        JButton submitButton = new JButton("Select");
+    // --- center: Start button ---
+    JPanel reviewPanel = new JPanel();
+    JButton cardButton = new JButton("Start");
+    cardButton.setFont(new Font("Georgia", Font.PLAIN, 24));
+    cardButton.setEnabled(false);              // disabled until a valid set loads
+    reviewPanel.add(cardButton);
+    reviewFrame.add(reviewPanel, BorderLayout.CENTER);
 
-        textBoxPanel.add(textBoxLabel);
-        textBoxPanel.add(textField);
-        textBoxPanel.add(submitButton);
-        
-        reviewFrame.add(textBoxPanel, BorderLayout.NORTH);
+    reviewFrame.pack();
+    reviewFrame.setLocationRelativeTo(null);
+    reviewFrame.setVisible(true);
 
-        JPanel reviewPanel = new JPanel();
-        JButton cardButton = new JButton("Start");
-        cardButton.setFont(new Font("Georgia", Font.PLAIN, 24));
-        reviewPanel.add(cardButton);
-        reviewFrame.add(reviewPanel, BorderLayout.CENTER);
-
-        reviewFrame.pack();
-        reviewFrame.setLocationRelativeTo(null);
-        reviewFrame.setVisible(true);
-
-        submitButton.addActionListener(new ActionListener(){
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            filename = textField.getText().trim();
-        
-            if(!filename.isEmpty()) 
-            {
-                set = new FlashcardSet(dir + filename + ".csv");
-                System.out.println("loaded flashcard set: " + filename);
-
-                textBoxPanel.remove(textBoxLabel);
-                textBoxPanel.remove(textField);
-                textBoxPanel.remove(submitButton);
-                reviewFrame.revalidate();
-
-                return ;
-            } 
-
-            else 
-            {
-                JOptionPane.showMessageDialog(null, "Please enter a filename: ");
+    // Try to resolve file from project root or from src/ (see helper below)
+    submitButton.addActionListener(new ActionListener() {
+        @Override public void actionPerformed(ActionEvent e) {
+            String name = textField.getText().trim();
+            if (name.isEmpty()) {
+                JOptionPane.showMessageDialog(reviewFrame, "Please enter a filename.");
+                return;
             }
-        }
-            
-        });
-        cardButton.addActionListener(new ActionListener(){
+            java.io.File f = resolveSetFile(name);          // <— uses helper below
+            System.out.println("user.dir = " + System.getProperty("user.dir"));
+            if (f == null) {
+                JOptionPane.showMessageDialog(
+                    reviewFrame,
+                    "File not found:\n" +
+                    "• Cards/" + name + ".csv\n" +
+                    "• ../Cards/" + name + ".csv"
+                );
+                return;
+            }
 
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-          //  for(int i = 0; i < )
+            FlashcardSet loaded = new FlashcardSet(f.getPath());
+            if (loaded.getSize() <= 0) {
+                JOptionPane.showMessageDialog(reviewFrame, "That file has no cards.");
+                return;
+            }
+
+            filename = name;
+            set = loaded;
+            System.out.println("Loaded flashcard set: " + f.getPath());
+
+            textBoxPanel.remove(textBoxLabel);
+            textBoxPanel.remove(textField);
+            textBoxPanel.remove(submitButton);
+            reviewFrame.revalidate();
+            reviewFrame.repaint();
+
+            cardButton.setEnabled(true);
         }
-         
     });
-    }
+
+    cardButton.addActionListener(new ActionListener() {
+        @Override public void actionPerformed(ActionEvent e) {
+            if (set == null || set.questions.isEmpty()) {
+                JOptionPane.showMessageDialog(reviewFrame, "Load a flashcard set first.");
+                return;
+            }
+            JFrame reviewWindow = new JFrame("Review: " + filename);
+            reviewWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            reviewWindow.setLayout(new BorderLayout());
+            reviewWindow.add(reviewFlashcardUI(), BorderLayout.CENTER);
+            reviewWindow.pack();
+            reviewWindow.setLocationRelativeTo(null);
+            reviewWindow.setVisible(true);
+        }
+    });
+}
+
     
     public void createModifyGUI() {
         JFrame createFrame = new JFrame("Create and Modify");
