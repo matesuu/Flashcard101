@@ -23,3 +23,10 @@ or alternatively if you run macOS:
 4. Type the following into the command line to start the execution of the applicaton:
 
     java GUI
+
+5. Once the GUI opens:
+- In the text box labeled **"Enter a Flashcard Set"**, you can type either **Cards** or **ComputerBasics**
+- Click **Select** to load the chosen flashcard set.
+- Then click **Start** to begin studying your flashcards.
+
+Tip: You can add new CSV files to the `src/Cards` folder to create your own custom flashcard sets!
