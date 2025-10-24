@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import javax.swing.border.EmptyBorder;
 
 public class GUI
 {
@@ -21,37 +22,40 @@ public class GUI
         JFrame frame = new JFrame("Flashcard101");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        frame.setSize(1200, 1200);
+        // frame.setSize(1200, 1200);
         frame.setResizable(true);
-        frame.setVisible(true);
 
         JLabel title = new JLabel("Flashcard101: An Interactive Flashcard Application", SwingConstants.CENTER);
         title.setFont(new Font("Georgia", Font.PLAIN, 36));
         frame.add(title, BorderLayout.NORTH);
 
-        JLabel credits = new JLabel("Created by Mateo Alado, Amreen Ahmed, Sanad Atia, Ohenewaa Ampem Darko, and Twinkle Johnson - Fall 2025", SwingConstants.CENTER);
+        JLabel credits = new JLabel(
+        "Created by Mateo Alado, Amreen Ahmed, Sanad Atia, Ohenewaa Ampem Darko, and Twinkle Johnson - Fall 2025",
+        SwingConstants.CENTER);
         credits.setFont(new Font("Georgia", Font.PLAIN, 28));
         frame.add(credits, BorderLayout.SOUTH);
 
-        JPanel reviewPanel = new JPanel();
-        reviewPanel.setLayout(new FlowLayout());
-        frame.add(reviewPanel, BorderLayout.EAST);
-
-        JPanel createPanel = new JPanel();
-        createPanel.setLayout(new FlowLayout());
-        frame.add(createPanel, BorderLayout.WEST);
-
         JButton reviewButton = new JButton("Review Flashcards");
         reviewButton.setFont(new Font("Georgia", Font.PLAIN, 24));
-        reviewButton.setPreferredSize(new Dimension(600, 700));
-        reviewPanel.add(reviewButton, BorderLayout.CENTER);
-        
+        reviewButton.setPreferredSize(new Dimension(400, 240));
+        reviewButton.setFocusPainted(false);
+
         JButton createButton = new JButton("Create and Modify");
         createButton.setFont(new Font("Georgia", Font.PLAIN, 24));
-        createButton.setPreferredSize(new Dimension(600, 700));
-        createPanel.add(createButton, BorderLayout.CENTER);
+        createButton.setPreferredSize(new Dimension(400, 240));
+        createButton.setFocusPainted(false);
 
-        
+        // ✅ Make them exactly the same size
+        Dimension sameSize = reviewButton.getPreferredSize();
+        createButton.setPreferredSize(sameSize);
+
+        // ✅ Place them side by side, centered
+        JPanel mainButtons = new JPanel(new GridLayout(1, 2, 16, 16));
+        mainButtons.add(reviewButton);
+        mainButtons.add(createButton);
+        mainButtons.setBorder(new EmptyBorder(24, 24, 24, 24)); // add padding
+        frame.add(mainButtons, BorderLayout.CENTER);
+    
         reviewButton.addActionListener(e -> {
             
              // test
@@ -65,6 +69,9 @@ public class GUI
             frame.dispose();
             createModifyGUI();
         });
+        frame.pack(); // size window based on its contents
+        frame.setLocationRelativeTo(null); // center the window
+        frame.setVisible(true);
 
     }
 
@@ -73,13 +80,9 @@ public class GUI
         JFrame reviewFrame = new JFrame("Review Flashcards");
         reviewFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         reviewFrame.setLayout(new BorderLayout());
-        reviewFrame.setSize(1200, 1200);
         reviewFrame.setResizable(true);
-        reviewFrame.setVisible(true);
 
         JPanel textBoxPanel = new JPanel();
-        reviewFrame.add(textBoxPanel, BorderLayout.CENTER);
-
         JLabel textBoxLabel = new JLabel("Enter a Flashcard Set: ");
         JTextField textField = new JTextField(20);
         JButton submitButton = new JButton("Select");
@@ -87,6 +90,18 @@ public class GUI
         textBoxPanel.add(textBoxLabel);
         textBoxPanel.add(textField);
         textBoxPanel.add(submitButton);
+        
+        reviewFrame.add(textBoxPanel, BorderLayout.NORTH);
+
+        JPanel reviewPanel = new JPanel();
+        JButton cardButton = new JButton("Start");
+        cardButton.setFont(new Font("Georgia", Font.PLAIN, 24));
+        reviewPanel.add(cardButton);
+        reviewFrame.add(reviewPanel, BorderLayout.CENTER);
+
+        reviewFrame.pack();
+        reviewFrame.setLocationRelativeTo(null);
+        reviewFrame.setVisible(true);
 
         submitButton.addActionListener(new ActionListener(){
 
@@ -115,16 +130,6 @@ public class GUI
         }
             
         });
-        
-        
-         JPanel reviewPanel = new JPanel(); 
-         reviewFrame.add(reviewPanel, BorderLayout.CENTER);
-
-         JButton cardButton = new JButton("Start");
-         cardButton.setFont(new Font("Georgia", Font.PLAIN, 24));
-         reviewPanel.add(cardButton);
-
-        
         cardButton.addActionListener(new ActionListener(){
 
         @Override
@@ -139,7 +144,7 @@ public class GUI
     public void createModifyGUI() {
         JFrame createFrame = new JFrame("Create and Modify");
         createFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        createFrame.setSize(800, 600);
+        // createFrame.setSize(800, 600);
         createFrame.setResizable(true);
     
         JPanel mainPanel = new JPanel();
@@ -172,8 +177,11 @@ public class GUI
             } else {
                 JOptionPane.showMessageDialog(null, "Please enter a filename: ");
             }
+
         });
-    
+
+        createFrame.pack();                     
+        createFrame.setLocationRelativeTo(null);
         createFrame.setVisible(true);
     }
     
@@ -301,6 +309,14 @@ public class GUI
 
     public static void main(String[] args)
     {
+            try {
+        for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                UIManager.setLookAndFeel(info.getClassName());
+                break;
+            }
+        }
+    } catch (Exception ignore) {}
         new GUI();
     }
 }
