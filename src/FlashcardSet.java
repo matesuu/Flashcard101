@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Collections;
 
 public class FlashcardSet
 {
@@ -47,10 +48,10 @@ public class FlashcardSet
 
             while((line = reader.readLine()) != null) // if line is not "", then continue loop
             {
-                String[] parts = line.split(","); // split the string into term and info (comma acts a delimiter)
-                
-                add(parts[0].trim(), parts[1].trim()); // NOTE!!!: add(parts[0].trim(), parts[1].trim()) also worked
-                size++; // increment size
+               if (line.trim().isEmpty()) continue;     // skip blanks
+                String[] parts = line.split(",", 2);     // <-- keep the answer intact
+                if (parts.length < 2) continue;          // or log/throw if you prefer
+                add(parts[0].trim(), parts[1].trim());
             }
         }
 
@@ -69,8 +70,8 @@ public class FlashcardSet
             terms.add(term);
             questions.add(new QA(term, info));
         }
-
         size++;
+
     }
 
     public void remove(String term)
@@ -86,7 +87,7 @@ public class FlashcardSet
 
     public void edit(String term, String newInfo)
     {
-        if(cards.containsKey(terms))
+        if(cards.containsKey(term))
         {
             cards.put(term, newInfo);
         }
@@ -181,6 +182,24 @@ public class FlashcardSet
         {
             e.printStackTrace();
             return ;
+        }
+    }
+	// --- Added for CLI compatibility ---
+    public void displayTerm(int index) {
+        String term = getTerm(index);
+        if (term != null) {
+            System.out.println("Term: " + term);
+        } else {
+            System.out.println("Invalid index: " + index);
+        }
+    }
+
+    public void displayInfo(String term) {
+        String info = getInfo(term);
+        if (info != null) {
+            System.out.println("Info: " + info);
+        } else {
+            System.out.println("No info found for: " + term);
         }
     }
 }
