@@ -1,0 +1,57 @@
+# Compiled Java class files
+*.class
+
+# JAR/WAR/EAR package files
+*.jar
+*.war
+*.ear
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Virtual machine crash logs
+hs_err_pid*
+replay_pid*
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux system files
+*~
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+.project
+.classpath
+.settings/
+
+# Build directories
+bin/
+build/
+out/
+target/
+
+# Test directory (currently just has a placeholder)
+docs/test/
+
+# Backup files
+*.bak
+*.tmp
+*.temp
+
+# Log files
+*.log
